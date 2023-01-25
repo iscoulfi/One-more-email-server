@@ -42,7 +42,7 @@ const server = app.listen(PORT, () =>
 );
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: process.env.SERV_ORIGIN,
     credentials: true,
   },
 });
@@ -58,13 +58,11 @@ io.on('connection', socket => {
     const sendUserSocket = onlineUsers.get(data.to);
 
     if (sendUserSocket) {
-      socket
-        .to(sendUserSocket)
-        .emit('msg-recieve', {
-          from: data.from,
-          theme: data.theme,
-          message: data.message,
-        });
+      socket.to(sendUserSocket).emit('msg-recieve', {
+        from: data.from,
+        theme: data.theme,
+        message: data.message,
+      });
     }
   });
 });
